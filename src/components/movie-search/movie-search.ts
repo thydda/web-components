@@ -1,6 +1,5 @@
 import { css, html, LitElement, unsafeCSS } from 'lit';
 import bootstrapCss from 'bootstrap/dist/css/bootstrap.min.css?inline';
-import appIndicatorUrl from 'bootstrap-icons/icons/app-indicator.svg?inline';
 import '@awesome.me/webawesome/dist/components/icon/icon.js';
 import type { Movie } from './movie.model';
 
