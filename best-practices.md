@@ -28,4 +28,4 @@ Run npm run check (lint, format, typecheck, component-test presence, unit tests 
 
 Tests must assert behavior, not merely mirror implementation or snapshots. Await updateComplete rather than sleeps, and remove fixtures/listeners after each test.
 
-Browser integration is currently checked manually; no automated e2e command or CI is configured. Record evidence and limitations. ESLint checks code patterns, not the full architecture or accessibility checklist.
+GitHub Actions runs unit tests on pull requests targeting main. Browser integration is currently checked manually; no automated e2e command is configured. Record evidence and limitations. ESLint checks code patterns, not the full architecture or accessibility checklist.
