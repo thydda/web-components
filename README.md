@@ -105,6 +105,85 @@ merging when validation fails.
 
 When a library contract changes, validate web-components and its mfe1 consumer. When federation or routes change, verify navigation through shell in a browser. Do not merge other repositories automatically as part of a check.
 
+## Publishing to GitHub Packages
+
+Run the following commands from this repository. The package is published as
+`@thydda/web-components` to `https://npm.pkg.github.com`; `publishConfig` selects
+that registry and `repository` links the package to `thydda/web-components`.
+
+### Authentication
+
+In GitHub account settings, open Developer settings → Personal access tokens →
+Tokens (classic). Create a token with `write:packages` and `read:packages`.
+The account must have permission to publish the package. The `repo` scope is not
+needed just to publish this npm package.
+
+```sh
+npm login --scope=@thydda --registry=https://npm.pkg.github.com --auth-type=legacy
+```
+
+Enter your GitHub username and use the token as the password. Keep credentials
+out of repository files and commits.
+
+### Version and publication
+
+Review `package.json` and check the versions already published:
+
+```sh
+npm view @thydda/web-components versions --json --registry=https://npm.pkg.github.com
+```
+
+Do not reuse a published version. A failed lookup can indicate missing access or
+a network problem; confirm those before treating it as a first publication.
+For a new release, update the version and lockfile together, for example:
+
+```sh
+npm version patch --no-git-tag-version
+```
+
+Choose `patch` for fixes, `minor` for compatible features and `major` for breaking
+changes. Before 1.0, agree on the next version and document breaking API changes.
+For the first publication, the current version can be used if it is available.
+Review and commit the release changes before publishing from `main`.
+
+```sh
+npm run check
+npm pack --dry-run
+npm publish
+```
+
+Inspect the dry-run file list for `dist/index.js` and `dist/types/index.d.ts`.
+`npm publish` also runs `prepublishOnly`, which executes `npm run check` again
+against the code being published. The PR workflow already runs the same checks
+in GitHub; it does not publish packages automatically.
+
+Confirm publication using the version you released:
+
+```sh
+npm view @thydda/web-components@0.2.0 version --registry=https://npm.pkg.github.com
+```
+
+### Installing in a consumer
+
+Create a project `.npmrc` containing only the scope mapping:
+
+```ini
+@thydda:registry=https://npm.pkg.github.com
+```
+
+Authenticate with a token with `read:packages` and package access, then install
+the published version (replace `0.2.0` with your release):
+
+```sh
+npm install @thydda/web-components@0.2.0 --save-exact
+```
+
+This replaces the local `file:../web-components` dependency. Rebuild the consumer
+after updating the package. GitHub Actions consumers also need authentication
+and package read access.
+
+See [GitHub's npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
+
 ## Local skill
 
 [web-components](.agents/skills/web-components/SKILL.md) contains conventions for
