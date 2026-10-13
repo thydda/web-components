@@ -14,6 +14,7 @@
     }
   },
   "scripts": {
+    "prepublishOnly": "npm run check",
     "build": "vite build && tsc -p tsconfig.build.json",
     "test": "node scripts/check-component-tests.mjs && vitest run",
     "test:watch": "vitest",
@@ -46,5 +47,12 @@
   },
   "engines": {
     "node": ">=22.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thydda/web-components.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
