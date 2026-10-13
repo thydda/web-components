@@ -97,9 +97,11 @@ npm run merge:main -- --continue
 
 Or abort with `git merge --abort`. Failed commit hooks can also be corrected before continuing. Checks are repeated on every continuation; unstaged/untracked changes prevent completion. Other Git commands and GitHub can bypass this local flow; a pre-merge hook alone does not cover every merge mode.
 
-GitHub Actions runs `npm ci` and `npm run test:unit` on pull requests targeting
-`main`, testing the proposed merge result. Configure the `Unit tests` check as
-required in GitHub branch protection to prevent merging when tests fail.
+GitHub Actions installs dependencies with `npm ci` and runs `npm run check` on
+pull requests targeting `main`, checking the proposed merge result. This validates
+lint, formatting, types, merge-script tests, unit tests and the production build.
+Configure the `Check` check as required in GitHub branch protection to prevent
+merging when validation fails.
 
 When a library contract changes, validate web-components and its mfe1 consumer. When federation or routes change, verify navigation through shell in a browser. Do not merge other repositories automatically as part of a check.
 
