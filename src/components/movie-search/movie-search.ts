@@ -1,5 +1,7 @@
 import { css, html, LitElement, unsafeCSS } from 'lit';
 import bootstrapCss from 'bootstrap/dist/css/bootstrap.min.css?inline';
+import appIndicatorUrl from 'bootstrap-icons/icons/app-indicator.svg?inline';
+import '@awesome.me/webawesome/dist/components/icon/icon.js';
 import type { Movie } from './movie.model';
 
 export interface MovieSearchResultsEventDetail {
@@ -193,6 +195,7 @@ export class MovieSearch extends LitElement {
     return html`
       <section class="movie-search" aria-label=${this.label}>
         <div class="search-panel">
+          <wa-icon name="moon"></wa-icon>
           <label class="form-label" for="movie-query">${this.label}</label>
           <input
             id="movie-query"

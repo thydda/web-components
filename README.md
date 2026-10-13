@@ -95,7 +95,11 @@ This only accepts a local branch, prepares a merge with `--no-ff --no-commit`, v
 npm run merge:main -- --continue
 ```
 
-Or abort with `git merge --abort`. Failed commit hooks can also be corrected before continuing. Checks are repeated on every continuation; unstaged/untracked changes prevent completion. There is no CI or server-side merge enforcement. Other Git commands and GitHub can bypass this local flow; a pre-merge hook alone does not cover every merge mode.
+Or abort with `git merge --abort`. Failed commit hooks can also be corrected before continuing. Checks are repeated on every continuation; unstaged/untracked changes prevent completion. Other Git commands and GitHub can bypass this local flow; a pre-merge hook alone does not cover every merge mode.
+
+GitHub Actions runs `npm ci` and `npm run test:unit` on pull requests targeting
+`main`, testing the proposed merge result. Configure the `Unit tests` check as
+required in GitHub branch protection to prevent merging when tests fail.
 
 When a library contract changes, validate web-components and its mfe1 consumer. When federation or routes change, verify navigation through shell in a browser. Do not merge other repositories automatically as part of a check.
 

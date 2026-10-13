@@ -2,6 +2,10 @@
 
 Movie search component with Bootstrap styles encapsulated in Shadow DOM.
 
+The Web Awesome app-indicator icon uses an embedded SVG imported from bootstrap-icons.
+Consumers do not need to serve `/assets/icons/` or configure a Web Awesome base path
+for this icon.
+
 ## Public API
 
 - Tag: `<movie-search>`; explicit registration: `defineMovieSearch()`.

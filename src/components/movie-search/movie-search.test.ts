@@ -41,6 +41,18 @@ describe('movie-search custom element', () => {
     expect(customElements.get('movie-search')).toBe(MovieSearch);
   });
 
+  it('renders the Web Awesome moon icon', () => {
+    const icon = element.shadowRoot?.querySelector('wa-icon');
+    expect(icon).not.toBeNull();
+    expect(icon?.getAttribute('name')).toBe('moon');
+    const iconConstructor = customElements.get('wa-icon');
+    expect(iconConstructor).toBeDefined();
+    if (!iconConstructor) {
+      throw new Error('Web Awesome icon was not registered');
+    }
+    expect(icon).toBeInstanceOf(iconConstructor);
+  });
+
   it('provides a default placeholder', () => {
     expect(element.shadowRoot?.querySelector('input')?.placeholder).toBe(
       'Search by title, director or story…',
