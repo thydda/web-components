@@ -10,6 +10,9 @@ for this icon.
 
 - Tag: `<movie-search>`; explicit registration: `defineMovieSearch()`.
 - Property `movies: Movie[]`, initially empty. Assign a new array to update it.
+- Property `selectedMovieIds: number[]`, initially empty. Assign a new array of
+  selected IDs to update button labels and `aria-pressed`. The consumer owns this
+  state; clicks request a change without modifying this array.
 - Property/attribute `query: string`, initially empty.
 - Property/attribute `placeholder: string`, defaulting to
   `Search by title, director or story…`. It can be changed at any time to update
@@ -20,9 +23,11 @@ for this icon.
   them and update the view.
 - `Movie`: `readonly id: number`, `title`, `director`, `year`, `summary`, `poster`.
   The ID is required and preserved in search and selection events.
-- Event `movie-search:results`: `CustomEvent<MovieSearchResultsEventDetail>` with
+- Event `movie-search-results`: `CustomEvent<MovieSearchResultsEventDetail>` with
   `{ query, results }`, emitted when the user types in the search box.
-- Event `movie-search:select`: `CustomEvent<MovieSearchSelectEventDetail>` with `{ movie }`.
+- Event `movie-search-select`: `CustomEvent<MovieSearchSelectEventDetail>` with
+  `{ movie, selected }`. The top-level `selected` is the requested next state:
+  `true` to select and `false` to unselect. Update `selectedMovieIds` in response.
 
 Both events use `bubbles: true` and `composed: true`. Filtering searches titles,
 directors and summaries, ignoring case and trimming the query's surrounding spaces.

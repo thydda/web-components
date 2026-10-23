@@ -138,7 +138,7 @@ describe('movie-search custom element', () => {
     document.body.append(element);
     await element.updateComplete;
     const listener = vi.fn();
-    document.body.addEventListener('movie-search:select', listener);
+    document.body.addEventListener('movie-search-select', listener);
     try {
       element.shadowRoot?.querySelector('button')?.click();
       expect(listener).toHaveBeenCalledOnce();
@@ -148,13 +148,13 @@ describe('movie-search custom element', () => {
         composed: true,
       });
     } finally {
-      document.body.removeEventListener('movie-search:select', listener);
+      document.body.removeEventListener('movie-search-select', listener);
     }
   });
 
   it('filters movies and emits a bubbling results event', async () => {
     const listener = vi.fn();
-    document.body.addEventListener('movie-search:results', listener);
+    document.body.addEventListener('movie-search-results', listener);
 
     const input = element.shadowRoot?.querySelector<HTMLInputElement>('input[type="search"]');
     expect(input).not.toBeNull();
@@ -175,7 +175,7 @@ describe('movie-search custom element', () => {
       composed: true,
     });
 
-    document.body.removeEventListener('movie-search:results', listener);
+    document.body.removeEventListener('movie-search-results', listener);
   });
 
   it('renders movies as unselected by default', () => {
@@ -224,7 +224,7 @@ describe('movie-search custom element', () => {
       element.selectedMovieIds = selected ? [movies[0].id] : [];
       await element.updateComplete;
       const listener = vi.fn();
-      document.body.addEventListener('movie-search:select', listener);
+      document.body.addEventListener('movie-search-select', listener);
       try {
         const button = element.shadowRoot?.querySelector('button');
         expect(button).not.toBeNull();
@@ -241,7 +241,7 @@ describe('movie-search custom element', () => {
         expect(button?.getAttribute('aria-pressed')).toBe(String(selected));
         expect(movies[0]).not.toHaveProperty('selected');
       } finally {
-        document.body.removeEventListener('movie-search:select', listener);
+        document.body.removeEventListener('movie-search-select', listener);
       }
     },
   );

@@ -178,7 +178,7 @@ export class MovieSearch extends LitElement {
 
     this.query = event.currentTarget.value;
     this.dispatchEvent(
-      new CustomEvent<MovieSearchResultsEventDetail>('movie-search:results', {
+      new CustomEvent<MovieSearchResultsEventDetail>('movie-search-results', {
         detail: { query: this.query, results: this.filteredMovies },
         bubbles: true,
         composed: true,
@@ -188,7 +188,7 @@ export class MovieSearch extends LitElement {
 
   private readonly handleMovieSelect = (movie: MovieWithSelected): void => {
     this.dispatchEvent(
-      new CustomEvent<MovieSearchSelectEventDetail>('movie-search:select', {
+      new CustomEvent<MovieSearchSelectEventDetail>('movie-search-select', {
         detail: { movie, selected: !movie.selected },
         bubbles: true,
         composed: true,

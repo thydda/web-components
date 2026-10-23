@@ -2,7 +2,17 @@
 
 Release notes and public API changes for `@thydda/web-components`.
 
-## API 0.2.2
+## Unreleased
+
+### Breaking changes
+
+- Rename `movie-search:select` to `movie-search-select` and
+  `movie-search:results` to `movie-search-results`. Update all event listeners
+  and Angular template bindings to use the new names. Angular interprets `:`
+  in template event bindings as a global target separator.
+- Event payloads and their `bubbles` and `composed` settings are unchanged.
+
+## API 0.2.3
 
 ### Movie selection
 

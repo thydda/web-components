@@ -1,6 +1,6 @@
 # @thydda/web-components
 
-**Latest version: 0.2.2** · [Release notes](CHANGELOG.md#api-022)
+**Latest version: 0.2.3** · [Release notes](CHANGELOG.md#api-023)
 
 Reusable Web Components built with Lit and TypeScript, independent of Angular.
 Vite generates the ES Module package and Vitest runs unit tests with jsdom.
@@ -65,7 +65,7 @@ can be called repeatedly and check whether `customElements` is available.
 
 Add `CUSTOM_ELEMENTS_SCHEMA` to `schemas` in the consuming Angular component.
 Use property bindings for complex data: `<movie-search [movies]="movies" />`.
-Listen to public events with `(movie-search:select)="onSelect($event)"` and validate
+Listen to public events with `(movie-search-select)="onSelect($event)"` and validate
 the `CustomEvent<MovieSearchSelectEventDetail>` type in the handler.
 
 See [the movie-search contract](src/components/movie-search/README.md).
@@ -200,4 +200,4 @@ it for these tasks. It can be versioned with the project without global installa
 ## Release history
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes and API changes, including
-[API 0.2.2](CHANGELOG.md#api-022).
+[API 0.2.3](CHANGELOG.md#api-023).
