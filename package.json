@@ -1,6 +1,6 @@
 {
   "name": "@thydda/web-components",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Reusable framework-independent Web Components built with Lit.",
   "type": "module",
   "types": "./dist/types/index.d.ts",

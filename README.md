@@ -1,5 +1,7 @@
 # @thydda/web-components
 
+**Latest version: 0.2.2** · [Release notes](CHANGELOG.md#api-022)
+
 Reusable Web Components built with Lit and TypeScript, independent of Angular.
 Vite generates the ES Module package and Vitest runs unit tests with jsdom.
 Lit is a runtime dependency external to the bundle.
@@ -160,7 +162,7 @@ in GitHub; it does not publish packages automatically.
 Confirm publication using the version you released:
 
 ```sh
-npm view @thydda/web-components@0.2.0 version --registry=https://npm.pkg.github.com
+npm view @thydda/web-components@X.Y.Z version --registry=https://npm.pkg.github.com
 ```
 
 ### Installing in a consumer
@@ -172,15 +174,13 @@ Create a project `.npmrc` containing only the scope mapping:
 ```
 
 Authenticate with a token with `read:packages` and package access, then install
-the published version (replace `0.2.0` with your release):
+the published version (replace `X.Y.Z` with your release):
 
 ```sh
-npm install @thydda/web-components@0.2.0 --save-exact
+npm install @thydda/web-components@X.Y.Z --save-exact
 ```
 
-This replaces the local `file:../web-components` dependency. Rebuild the consumer
-after updating the package. GitHub Actions consumers also need authentication
-and package read access.
+GitHub Actions consumers also need authentication and package read access.
 
 See [GitHub's npm registry documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
 
@@ -197,12 +197,7 @@ it for these tasks. It can be versioned with the project without global installa
 - [Type-aware linting](https://typescript-eslint.io/getting-started/typed-linting/)
 - [Git hooks](https://git-scm.com/docs/githooks)
 
-## API 0.2.0
+## Release history
 
-The public API uses Movie, the movies property and the { movie } selection payload.
-Consumers must update their imports, bindings and handlers to these names.
-mfe1 uses /movies and /movies/edit.
-
-The component supports --app-accent, --app-ink, --app-muted and --app-border as host
-CSS variables, with defaults for standalone use. Bootstrap remains encapsulated
-inside Shadow DOM.
+See [CHANGELOG.md](CHANGELOG.md) for release notes and API changes, including
+[API 0.2.2](CHANGELOG.md#api-022).
