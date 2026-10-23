@@ -10,6 +10,11 @@ export interface MovieSearchResultsEventDetail {
 
 export interface MovieSearchSelectEventDetail {
   movie: Movie;
+  selected: boolean;
+}
+
+export interface MovieWithSelected extends Movie {
+  selected: boolean;
 }
 
 export class MovieSearch extends LitElement {
@@ -18,6 +23,7 @@ export class MovieSearch extends LitElement {
     query: { type: String },
     placeholder: { type: String },
     label: { type: String },
+    selectedMovieIds: { type: Array },
   };
 
   static styles = [
@@ -142,11 +148,13 @@ export class MovieSearch extends LitElement {
   declare query: string;
   declare placeholder: string;
   declare label: string;
+  declare selectedMovieIds: number[];
 
   constructor() {
     super();
     this.movies = [];
     this.query = '';
+    this.selectedMovieIds = [];
     // Defaults; consumer properties/attributes override them after construction.
     this.placeholder = 'Search by title, director or story…';
     this.label = 'Search movies';
@@ -178,10 +186,10 @@ export class MovieSearch extends LitElement {
     );
   };
 
-  private readonly handleMovieSelect = (movie: Movie): void => {
+  private readonly handleMovieSelect = (movie: MovieWithSelected): void => {
     this.dispatchEvent(
       new CustomEvent<MovieSearchSelectEventDetail>('movie-search:select', {
-        detail: { movie },
+        detail: { movie, selected: !movie.selected },
         bubbles: true,
         composed: true,
       }),
@@ -190,6 +198,10 @@ export class MovieSearch extends LitElement {
 
   render() {
     const movies = this.filteredMovies;
+    const moviesWithSelected = movies.map((movie) => ({
+      ...movie,
+      selected: this.selectedMovieIds.includes(movie.id),
+    }));
 
     return html`
       <section class="movie-search" aria-label=${this.label}>
@@ -206,14 +218,14 @@ export class MovieSearch extends LitElement {
             @input=${this.handleSearchInput}
           />
 
-          <p class="result-count" aria-live="polite">${movies.length} movies found</p>
+          <p class="result-count" aria-live="polite">${moviesWithSelected.length} movies found</p>
         </div>
 
         ${
-          movies.length
+          moviesWithSelected.length
             ? html`
                 <div class="movie-grid">
-                  ${movies.map(
+                  ${moviesWithSelected.map(
                     (movie) => html`
                       <article class="card movie-card h-100">
                         <img
@@ -229,9 +241,10 @@ export class MovieSearch extends LitElement {
                           <button
                             class="select-movie btn btn-primary mt-auto"
                             type="button"
+                            aria-pressed=${movie.selected ? 'true' : 'false'}
                             @click=${() => this.handleMovieSelect(movie)}
                           >
-                            Select ${movie.title}
+                            ${movie.selected ? 'Unselect' : 'Select'} ${movie.title}
                           </button>
                         </div>
                       </article>

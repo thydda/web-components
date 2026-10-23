@@ -143,7 +143,7 @@ describe('movie-search custom element', () => {
       element.shadowRoot?.querySelector('button')?.click();
       expect(listener).toHaveBeenCalledOnce();
       expect(listener.mock.calls[0][0]).toMatchObject({
-        detail: { movie: movies[0] },
+        detail: { movie: { ...movies[0], selected: false }, selected: true },
         bubbles: true,
         composed: true,
       });
@@ -178,15 +178,71 @@ describe('movie-search custom element', () => {
     document.body.removeEventListener('movie-search:results', listener);
   });
 
-  it('emits the selected movie', () => {
-    const listener = vi.fn();
-    element.addEventListener('movie-search:select', listener);
-    const button = element.shadowRoot?.querySelector('button');
-
-    expect(button).not.toBeNull();
-    button?.click();
-
-    expect(listener).toHaveBeenCalledOnce();
-    expect(listener.mock.calls[0][0]).toMatchObject({ detail: { movie: movies[0] } });
+  it('renders movies as unselected by default', () => {
+    expect(element.selectedMovieIds).toEqual([]);
+    const buttons = element.shadowRoot?.querySelectorAll('button');
+    expect(buttons).toHaveLength(2);
+    buttons?.forEach((button, index) => {
+      expect(button.textContent?.trim()).toBe(`Select ${movies[index].title}`);
+      expect(button.getAttribute('aria-pressed')).toBe('false');
+    });
   });
+
+  it('reacts to selection changes supplied by the consumer', async () => {
+    element.selectedMovieIds = [movies[1].id, 999];
+    await element.updateComplete;
+    const buttons = element.shadowRoot?.querySelectorAll('button');
+    expect(buttons?.[0].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons?.[1].getAttribute('aria-pressed')).toBe('true');
+    expect(buttons?.[1].textContent?.trim()).toBe('Unselect Moonlight');
+
+    element.selectedMovieIds = [];
+    await element.updateComplete;
+    expect(buttons?.[1].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons?.[1].textContent?.trim()).toBe('Select Moonlight');
+  });
+
+  it('preserves selection when filtering and restoring results', async () => {
+    element.selectedMovieIds = [movies[1].id];
+    element.query = 'moonlight';
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('button')?.getAttribute('aria-pressed')).toBe('true');
+    expect(element.shadowRoot?.querySelector('button')?.textContent?.trim()).toBe(
+      'Unselect Moonlight',
+    );
+
+    element.query = '';
+    await element.updateComplete;
+    const buttons = element.shadowRoot?.querySelectorAll('button');
+    expect(buttons?.[0].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons?.[1].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it.each([false, true])(
+    'requests the opposite selection state when currently selected is %s',
+    async (selected) => {
+      element.selectedMovieIds = selected ? [movies[0].id] : [];
+      await element.updateComplete;
+      const listener = vi.fn();
+      document.body.addEventListener('movie-search:select', listener);
+      try {
+        const button = element.shadowRoot?.querySelector('button');
+        expect(button).not.toBeNull();
+        button?.click();
+        await element.updateComplete;
+
+        expect(listener).toHaveBeenCalledOnce();
+        expect(listener.mock.calls[0][0]).toMatchObject({
+          detail: { movie: { ...movies[0], selected }, selected: !selected },
+          bubbles: true,
+          composed: true,
+        });
+        expect(element.selectedMovieIds).toEqual(selected ? [movies[0].id] : []);
+        expect(button?.getAttribute('aria-pressed')).toBe(String(selected));
+        expect(movies[0]).not.toHaveProperty('selected');
+      } finally {
+        document.body.removeEventListener('movie-search:select', listener);
+      }
+    },
+  );
 });
